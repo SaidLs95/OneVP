@@ -101,11 +101,16 @@
         font-weight: 600;
         cursor: pointer;
         color: var(--text);
+        transition: background-color 0.2s ease, box-shadow 0.2s ease;
       }
 
       .platform-btn[aria-selected="true"] {
         background: var(--bg);
         box-shadow: var(--shadow-sm);
+      }
+
+      .platform-btn:hover {
+        background: color-mix(in oklab, var(--section), var(--bg) 70%);
       }
 
       main.instructions {
@@ -136,6 +141,7 @@
         place-items: center;
         font-size: 14px;
         font-weight: 700;
+        flex-shrink: 0;
       }
 
       .step-title {
@@ -204,7 +210,7 @@
       }
 
       .button.secondary {
-        background: var(--bg);
+        background: var(--section);
         color: var(--text);
         border: 1px solid var(--border);
       }
@@ -238,6 +244,10 @@
 
         .button {
           justify-content: center;
+        }
+        
+        .platform-selector {
+          flex-direction: column;
         }
       }
     </style>
@@ -288,7 +298,7 @@
                 class="button"
                 href="https://github.com/2dust/v2rayNG/releases"
                 target="_blank"
-                rel="noopener"
+                rel="noopener noreferrer"
               >
                 Скачать с GitHub
               </a>
@@ -296,7 +306,7 @@
                 class="button secondary"
                 href="https://play.google.com/store/apps/details?id=com.v2raytun.android"
                 target="_blank"
-                rel="noopener"
+                rel="noopener noreferrer"
               >
                 Google Play
               </a>
@@ -360,7 +370,7 @@
                 class="button"
                 href="https://apps.apple.com/am/app/v2raytun/id6476628951"
                 target="_blank"
-                rel="noopener"
+                rel="noopener noreferrer"
               >
                 App Store
               </a>
@@ -415,6 +425,11 @@
         try {
           if (window.Telegram && window.Telegram.WebApp) {
             window.Telegram.WebApp.expand?.();
+            // Инициализируем цветовую схему Telegram
+            document.documentElement.style.setProperty('--bg', window.Telegram.WebApp.backgroundColor || 'var(--tg-theme-bg-color, #ffffff)');
+            document.documentElement.style.setProperty('--text', window.Telegram.WebApp.textColor || 'var(--tg-theme-text-color, #111827)');
+            document.documentElement.style.setProperty('--button', window.Telegram.WebApp.buttonColor || 'var(--tg-theme-button-color, #2481cc)');
+            document.documentElement.style.setProperty('--button-text', window.Telegram.WebApp.buttonTextColor || 'var(--tg-theme-button-text-color, #ffffff)');
           }
         } catch (_) {}
       }
@@ -430,33 +445,59 @@
         };
 
         function selectPlatform(platform) {
+          // Проверяем существование панели
+          if (!panels[platform]) return;
+          
           tabs.forEach((btn) => {
             const isActive = btn.dataset.platform === platform;
             btn.setAttribute('aria-selected', String(isActive));
+            btn.classList.toggle('active', isActive);
           });
-          panels.android.classList.toggle('hidden', platform !== 'android');
-          panels.ios.classList.toggle('hidden', platform !== 'ios');
+          
+          Object.values(panels).forEach(panel => {
+            if (panel) {
+              panel.classList.add('hidden');
+            }
+          });
+          
+          if (panels[platform]) {
+            panels[platform].classList.remove('hidden');
+          }
+          
+          // Сохраняем выбор в localStorage
           try {
-            window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
+            localStorage.setItem('selectedPlatform', platform);
+          } catch (_) {}
+          
+          // Вибрация (если доступна)
+          try {
+            window.Telegram?.WebApp?.HapticFeedback?.impactOccurred?.('light');
           } catch (_) {}
         }
 
+        // Обработчик клика по табам
         tablist.addEventListener('click', (e) => {
           const btn = e.target.closest('[role="tab"]');
           if (!btn) return;
           selectPlatform(btn.dataset.platform);
         });
+
+        // Восстанавливаем предыдущий выбор или устанавливаем по умолчанию
+        try {
+          const savedPlatform = localStorage.getItem('selectedPlatform');
+          if (savedPlatform && panels[savedPlatform]) {
+            selectPlatform(savedPlatform);
+          }
+        } catch (_) {
+          selectPlatform('android');
+        }
       }
 
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-          initTG();
-          initTabs();
-        });
-      } else {
+      // Инициализация при загрузке документа
+      document.addEventListener('DOMContentLoaded', () => {
         initTG();
         initTabs();
-      }
+      });
     </script>
   </body>
 </html>
