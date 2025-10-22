@@ -3,419 +3,307 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Установка v2RayTun - Инструкция</title>
+    <title>Установка v2RayTun</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root {
-            --primary-color: #6A35FF;
-            --secondary-color: #8C52FF;
-            --accent-color: #FF6B9D;
-            --bg-color: #121212;
-            --card-bg: #1E1E1E;
-            --text-color: #FFFFFF;
-            --text-secondary: #B0B0B0;
-            --border-radius: 16px;
-            --shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            padding: 0;
-            overflow-x: hidden;
+            background-color: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
+            line-height: 1.4;
+            padding: 16px;
         }
 
         .container {
             max-width: 100%;
-            padding: 20px;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
-            padding: 20px 0;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" opacity="0.1"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-        }
-
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            position: relative;
-        }
-
-        .header p {
-            font-size: 16px;
-            opacity: 0.9;
-            position: relative;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--tg-theme-section-bg-color, #f0f0f0);
         }
 
         .app-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            border-radius: 20px;
-            margin: 0 auto 15px;
+            width: 64px;
+            height: 64px;
+            background: var(--tg-theme-button-color, #2481cc);
+            border-radius: 16px;
+            margin: 0 auto 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 36px;
-            box-shadow: var(--shadow);
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+        }
+
+        h1 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--tg-theme-hint-color, #999999);
         }
 
         .platform-selector {
             display: flex;
-            justify-content: center;
-            margin-bottom: 30px;
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 5px;
-            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            background: var(--tg-theme-section-bg-color, #f0f0f0);
+            border-radius: 12px;
+            padding: 4px;
         }
 
         .platform-btn {
-            padding: 12px 25px;
-            border: none;
-            background: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: var(--text-secondary);
             flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            padding: 10px 16px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--tg-theme-text-color, #000000);
         }
 
         .platform-btn.active {
-            background: var(--primary-color);
-            color: white;
-            box-shadow: 0 4px 12px rgba(106, 53, 255, 0.4);
+            background: var(--tg-theme-bg-color, #ffffff);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
         .instructions {
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 25px;
-            box-shadow: var(--shadow);
             margin-bottom: 20px;
         }
 
         .step {
-            margin-bottom: 30px;
-            padding-bottom: 25px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: var(--tg-theme-section-bg-color, #f0f0f0);
+            border-radius: 12px;
         }
 
-        .step:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
         }
 
         .step-number {
-            display: inline-flex;
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            width: 24px;
+            height: 24px;
+            background: var(--tg-theme-button-color, #2481cc);
             color: white;
             border-radius: 50%;
-            text-align: center;
+            display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
+            font-size: 14px;
+            font-weight: 500;
             margin-right: 12px;
-            box-shadow: 0 4px 8px rgba(106, 53, 255, 0.3);
         }
 
         .step-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: var(--text-color);
-            display: flex;
-            align-items: center;
+            font-size: 16px;
+            font-weight: 500;
         }
 
         .step-content {
-            margin-left: 44px;
+            font-size: 14px;
+            color: var(--tg-theme-text-color, #000000);
         }
 
         .step-content p {
-            margin-bottom: 15px;
-            color: var(--text-secondary);
+            margin-bottom: 12px;
         }
 
-        .screenshot {
-            width: 100%;
-            max-width: 280px;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            margin: 15px 0;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            display: block;
+        .step-content ul {
+            margin-left: 16px;
+            margin-bottom: 12px;
+        }
+
+        .step-content li {
+            margin-bottom: 4px;
         }
 
         .screenshot-placeholder {
             width: 100%;
             max-width: 280px;
             height: 500px;
-            border-radius: 12px;
-            margin: 15px 0;
+            border-radius: 8px;
+            margin: 12px auto;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #2A2A2A, #1A1A1A);
-            color: var(--text-secondary);
-            box-shadow: var(--shadow);
-            border: 2px dashed rgba(255, 255, 255, 0.1);
+            background: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-hint-color, #999999);
+            border: 1px solid var(--tg-theme-section-bg-color, #f0f0f0);
         }
 
         .screenshot-placeholder i {
-            font-size: 48px;
-            margin-bottom: 15px;
+            font-size: 36px;
+            margin-bottom: 8px;
             opacity: 0.5;
         }
 
-        .download-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 14px 24px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: 600;
-            margin-top: 10px;
-            box-shadow: 0 4px 15px rgba(106, 53, 255, 0.3);
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-        }
-
-        .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(106, 53, 255, 0.4);
-        }
-
-        .download-btn.secondary {
-            background: linear-gradient(135deg, #FF6B9D, #FF8E53);
-        }
-
-        .app-store-badges {
+        .button-group {
             display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
+            gap: 10px;
+            margin-top: 12px;
             flex-wrap: wrap;
         }
 
-        .app-store-badge {
-            height: 50px;
-            border-radius: 10px;
-            box-shadow: var(--shadow);
+        .button {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 16px;
+            background: var(--tg-theme-button-color, #2481cc);
+            color: var(--tg-theme-button-text-color, #ffffff);
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+        }
+
+        .button.secondary {
+            background: var(--tg-theme-section-bg-color, #f0f0f0);
+            color: var(--tg-theme-text-color, #000000);
+        }
+
+        .note {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 3px solid #ffc107;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 12px 0;
+            font-size: 14px;
         }
 
         .hidden {
             display: none;
         }
 
-        .note {
-            background: rgba(255, 107, 157, 0.1);
-            border-left: 4px solid var(--accent-color);
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            font-size: 14px;
-            color: var(--text-color);
-        }
-
-        .warning {
-            background: rgba(255, 193, 7, 0.1);
-            border-left: 4px solid #FFC107;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            font-size: 14px;
-            color: var(--text-color);
-        }
-
         .footer {
             text-align: center;
-            padding: 20px;
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin-top: 20px;
+            padding: 16px 0;
+            font-size: 13px;
+            color: var(--tg-theme-hint-color, #999999);
+            border-top: 1px solid var(--tg-theme-section-bg-color, #f0f0f0);
         }
 
-        .step-actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 15px;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 15px;
-            }
-            
-            .instructions {
-                padding: 20px;
-            }
-            
-            .platform-btn {
-                padding: 10px 15px;
-                font-size: 14px;
-            }
-            
-            .app-store-badges {
+        @media (max-width: 480px) {
+            .button-group {
                 flex-direction: column;
-                align-items: center;
             }
             
-            .step-content {
-                margin-left: 0;
+            .button {
+                justify-content: center;
             }
-            
-            .step-title {
-                margin-bottom: 15px;
-            }
-        }
-
-        /* Telegram Mini App specific styles */
-        .tg-theme-aware {
-            /* These colors will adapt to Telegram theme */
-            background: var(--tg-theme-bg-color, var(--bg-color));
-            color: var(--tg-theme-text-color, var(--text-color));
         }
     </style>
 </head>
-<body class="tg-theme-aware">
+<body>
     <div class="container">
         <div class="header">
             <div class="app-icon">V2</div>
             <h1>Установка v2RayTun</h1>
-            <p>Полное руководство по установке и настройке</p>
+            <p class="subtitle">Простая инструкция для Android и iOS</p>
         </div>
 
         <div class="platform-selector">
             <button class="platform-btn active" onclick="showPlatform('android')">
-                <i>🤖</i> Android
+                Android
             </button>
             <button class="platform-btn" onclick="showPlatform('ios')">
-                <i>🍎</i> iPhone
+                iPhone
             </button>
         </div>
 
         <!-- Android Instructions -->
         <div id="android-instructions" class="instructions">
             <div class="step">
-                <div class="step-title">
-                    <span class="step-number">1</span>
-                    Скачайте приложение v2RayTun
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Скачайте приложение</div>
                 </div>
                 <div class="step-content">
-                    <p>v2RayTun можно скачать из официального репозитория GitHub или через сторонние магазины приложений.</p>
+                    <p>v2RayTun можно скачать из официального репозитория GitHub.</p>
                     
-                    <div class="step-actions">
-                        <a href="https://github.com/2dust/v2rayNG/releases" class="download-btn" target="_blank" id="android-download">
-                            <i>⬇️</i> Скачать с GitHub
+                    <div class="button-group">
+                        <a href="https://github.com/2dust/v2rayNG/releases" class="button" target="_blank">
+                            Скачать с GitHub
                         </a>
-                        <a href="https://play.google.com/store/apps/details?id=com.v2raytun.app" class="download-btn secondary" target="_blank">
-                            <i>🛒</i> Google Play
+                        <a href="https://play.google.com/store/apps/details?id=com.v2raytun.app" class="button secondary" target="_blank">
+                            Google Play
                         </a>
-                    </div>
-                    
-                    <div class="screenshot-placeholder">
-                        <i>📱</i>
-                        <span>Скриншот страницы загрузки</span>
                     </div>
                 </div>
             </div>
 
             <div class="step">
-                <div class="step-title">
-                    <span class="step-number">2</span>
-                    Разрешите установку из неизвестных источников
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Разрешите установку</div>
                 </div>
                 <div class="step-content">
                     <p>Если скачиваете APK файл, необходимо разрешить установку приложений из неизвестных источников:</p>
-                    <p>Настройки → Безопасность → Неизвестные источники (включить)</p>
+                    <p>Настройки → Безопасность → Неизвестные источники</p>
                     
                     <div class="screenshot-placeholder">
-                        <i>⚙️</i>
-                        <span>Скриншот настроек безопасности</span>
+                        <i>📱</i>
+                        <span>Скриншот настроек</span>
                     </div>
                     
-                    <div class="warning">
-                        <strong>Внимание:</strong> Устанавливайте приложения только из проверенных источников!
+                    <div class="note">
+                        Устанавливайте приложения только из проверенных источников
                     </div>
                 </div>
             </div>
 
             <div class="step">
-                <div class="step-title">
-                    <span class="step-number">3</span>
-                    Установите и настройте приложение
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Настройте подключение</div>
                 </div>
                 <div class="step-content">
-                    <p>Запустите скачанный APK файл и завершите установку. После запуска приложения:</p>
-                    <ul style="margin-left: 20px; margin-bottom: 15px; color: var(--text-secondary);">
+                    <p>После установки:</p>
+                    <ul>
                         <li>Добавьте конфигурацию сервера</li>
                         <li>Настройте параметры подключения</li>
                         <li>Разрешите создание VPN-подключения</li>
                     </ul>
-                    
-                    <div class="screenshot-placeholder">
-                        <i>🔧</i>
-                        <span>Скриншот настроек приложения</span>
-                    </div>
                 </div>
             </div>
 
             <div class="step">
-                <div class="step-title">
-                    <span class="step-number">4</span>
-                    Запустите VPN подключение
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Запустите VPN</div>
                 </div>
                 <div class="step-content">
-                    <p>После настройки, нажмите кнопку подключения в приложении. Система запросит разрешение на создание VPN-подключения - предоставьте его.</p>
-                    
-                    <div class="screenshot-placeholder">
-                        <i>🔒</i>
-                        <span>Скриншот подключенного VPN</span>
-                    </div>
+                    <p>Нажмите кнопку подключения в приложении. Предоставьте разрешение на создание VPN-подключения.</p>
                     
                     <div class="note">
-                        <strong>Совет:</strong> Для стабильной работы рекомендуется добавить приложение в список исключений энергосбережения.
+                        Для стабильной работы добавьте приложение в список исключений энергосбережения
                     </div>
                 </div>
             </div>
@@ -424,103 +312,71 @@
         <!-- iOS Instructions -->
         <div id="ios-instructions" class="instructions hidden">
             <div class="step">
-                <div class="step-title">
-                    <span class="step-number">1</span>
-                    Скачайте приложение из App Store
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Скачайте приложение</div>
                 </div>
                 <div class="step-content">
-                    <p>На iPhone v2RayTun доступен через App Store или сторонние сервисы для тестирования.</p>
+                    <p>На iPhone v2RayTun доступен через App Store.</p>
                     
-                    <div class="app-store-badges">
-                        <a href="https://apps.apple.com/app/v2raytun/id1234567890" target="_blank">
-                            <div class="screenshot-placeholder" style="height: 60px; width: 180px; flex-direction: row;">
-                                <i>🍎</i>
-                                <span>App Store</span>
-                            </div>
+                    <div class="button-group">
+                        <a href="https://apps.apple.com/app/v2raytun/id1234567890" class="button" target="_blank">
+                            App Store
                         </a>
                     </div>
-                    
-                    <div class="screenshot-placeholder">
-                        <i>📱</i>
-                        <span>Скриншот App Store</span>
-                    </div>
                 </div>
             </div>
 
             <div class="step">
-                <div class="step-title">
-                    <span class="step-number">2</span>
-                    Настройте VPN профиль
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Настройте VPN профиль</div>
                 </div>
                 <div class="step-content">
-                    <p>После установки приложения, необходимо настроить VPN профиль в системных настройках:</p>
+                    <p>После установки приложения:</p>
                     <p>Настройки → Основные → VPN и управление устройствами → Добавить конфигурацию VPN...</p>
-                    
-                    <div class="screenshot-placeholder">
-                        <i>⚙️</i>
-                        <span>Скриншот настроек VPN</span>
-                    </div>
                 </div>
             </div>
 
             <div class="step">
-                <div class="step-title">
-                    <span class="step-number">3</span>
-                    Импортируйте конфигурацию
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Импортируйте конфигурацию</div>
                 </div>
                 <div class="step-content">
                     <p>В приложении v2RayTun импортируйте конфигурацию сервера:</p>
-                    <ul style="margin-left: 20px; margin-bottom: 15px; color: var(--text-secondary);">
+                    <ul>
                         <li>Через QR-код</li>
                         <li>Из файла конфигурации</li>
                         <li>Вручную введя параметры</li>
                     </ul>
-                    
-                    <div class="screenshot-placeholder">
-                        <i>📥</i>
-                        <span>Скриншот импорта конфигурации</span>
-                    </div>
                 </div>
             </div>
 
             <div class="step">
-                <div class="step-title">
-                    <span class="step-number">4</span>
-                    Активируйте VPN подключение
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Активируйте VPN</div>
                 </div>
                 <div class="step-content">
-                    <p>Вернитесь в приложение и активируйте VPN подключение. Первый раз система запросит разрешение - нажмите "Разрешить".</p>
-                    
-                    <div class="screenshot-placeholder">
-                        <i>🔒</i>
-                        <span>Скриншот активного подключения</span>
-                    </div>
+                    <p>Вернитесь в приложение и активируйте VPN подключение. Нажмите "Разрешить" при запросе системы.</p>
                     
                     <div class="note">
-                        <strong>Важно:</strong> На iOS VPN может автоматически отключаться при блокировке экрана или переходе в режим энергосбережения.
+                        На iOS VPN может автоматически отключаться при блокировке экрана
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="footer">
-            <p>v2RayTun Installation Guide © 2023</p>
-            <p>Инструкция актуальна для последней версии приложения</p>
+            <p>v2RayTun Installation Guide</p>
         </div>
     </div>
 
     <script>
         // Initialize Telegram Web App
         const tg = window.Telegram.WebApp;
-        
-        // Expand the app to full height
         tg.expand();
-        
-        // Enable closing confirmation
-        tg.enableClosingConfirmation();
-        
-        // Set background color according to Telegram theme
-        document.body.style.backgroundColor = tg.themeParams.bg_color || '#121212';
         
         function showPlatform(platform) {
             // Update buttons
@@ -533,23 +389,9 @@
             document.getElementById('android-instructions').classList.toggle('hidden', platform !== 'android');
             document.getElementById('ios-instructions').classList.toggle('hidden', platform !== 'ios');
             
-            // Send view event to Telegram
+            // Haptic feedback
             tg.HapticFeedback.impactOccurred('light');
         }
-
-        // Add click handlers for download buttons
-        document.querySelectorAll('.download-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                tg.HapticFeedback.notificationOccurred('success');
-                
-                // Log download attempt
-                tg.sendData(JSON.stringify({
-                    action: 'download_click',
-                    platform: btn.closest('.instructions').id.replace('-instructions', ''),
-                    source: btn.textContent.trim()
-                }));
-            });
-        });
 
         // Set initial platform based on user agent
         function detectPlatform() {
@@ -563,23 +405,9 @@
 
         // Initialize with detected platform
         const detectedPlatform = detectPlatform();
-        showPlatform(detectedPlatform);
-        
-        // Update buttons based on detected platform
-        document.querySelectorAll('.platform-btn').forEach((btn, index) => {
-            if ((detectedPlatform === 'ios' && index === 1) || (detectedPlatform === 'android' && index === 0)) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-
-        // Send telemetry about app open
-        tg.sendData(JSON.stringify({
-            action: 'app_open',
-            platform: detectedPlatform,
-            timestamp: new Date().toISOString()
-        }));
+        if (detectedPlatform === 'ios') {
+            document.querySelectorAll('.platform-btn')[1].click();
+        }
     </script>
 </body>
 </html>
