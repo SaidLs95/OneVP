@@ -1,42 +1,334 @@
-<!DOCTYPE html>
+<!<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OneVP Project</title>
+    <title>Инструкция по установке VPN</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background: #f5f5f5;
         }
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #333;
+
+        .header {
             text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .platform-selector {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 25px;
+            padding: 5px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .platform-btn {
+            padding: 12px 30px;
+            border: none;
+            background: none;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .platform-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+        }
+
+        .instructions {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .step {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .step:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .step-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .step-content {
+            margin-left: 40px;
+        }
+
+        .screenshot {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin: 15px 0;
+            border: 2px solid #f0f0f0;
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .app-store-badges {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .app-store-badge {
+            height: 50px;
+            border-radius: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .note {
+            background: #fff9e6;
+            border-left: 4px solid #ffd700;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .instructions {
+                padding: 20px;
+            }
+            
+            .platform-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+            
+            .app-store-badges {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🚀 OneVP Project</h1>
-        <p>Ваш сайт успешно работает на GitHub Pages!</p>
-        <p>Это обновленная версия страницы.</p>
-        
-        <h2>Что можно сделать:</h2>
-        <ul>
-            <li>Добавить стили CSS</li>
-            <li>Добавить JavaScript</li>
-            <li>Создать дополнительные страницы</li>
-            <li>Добавить изображения</li>
-        </ul>
+        <div class="header">
+            <h1>📱 Установка VPN</h1>
+            <p>Простая инструкция для Android и iPhone</p>
+        </div>
+
+        <div class="platform-selector">
+            <button class="platform-btn active" onclick="showPlatform('android')">Android</button>
+            <button class="platform-btn" onclick="showPlatform('ios')">iPhone</button>
+        </div>
+
+        <!-- Android Instructions -->
+        <div id="android-instructions" class="instructions">
+            <div class="step">
+                <span class="step-number">1</span>
+                <span class="step-title">Скачайте приложение</span>
+                <div class="step-content">
+                    <p>Откройте Google Play Market и найдите "VPN" или используйте прямую ссылку:</p>
+                    <a href="https://play.google.com/store/apps/details?id=com.nordvpn.android" class="download-btn" target="_blank">
+                        Скачать NordVPN
+                    </a>
+                    <a href="https://play.google.com/store/apps/details?id=com.expressvpn.vpn" class="download-btn" style="margin-left: 10px;" target="_blank">
+                        Скачать ExpressVPN
+                    </a>
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <span class="step-title">Установите приложение</span>
+                <div class="step-content">
+                    <p>Нажмите "Установить" и дождитесь завершения загрузки</p>
+                    <img src="https://via.placeholder.com/300x500/667eea/ffffff?text=Play+Store+Install" alt="Установка из Play Store" class="screenshot">
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <span class="step-title">Зарегистрируйтесь</span>
+                <div class="step-content">
+                    <p>Откройте приложение и создайте аккаунт (обычно требуется email)</p>
+                    <img src="https://via.placeholder.com/300x500/764ba2/ffffff?text=Регистрация+в+приложении" alt="Регистрация в приложении" class="screenshot">
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                <span class="step-title">Подключитесь к VPN</span>
+                <div class="step-content">
+                    <p>Нажмите кнопку "Подключить" и выберите страну</p>
+                    <img src="https://via.placeholder.com/300x500/667eea/ffffff?text=Подключение+VPN" alt="Подключение VPN" class="screenshot">
+                </div>
+            </div>
+
+            <div class="note">
+                <strong>Примечание:</strong> Большинство VPN-сервисов предлагают бесплатный пробный период или ограниченный бесплатный тариф.
+            </div>
+        </div>
+
+        <!-- iOS Instructions -->
+        <div id="ios-instructions" class="instructions hidden">
+            <div class="step">
+                <span class="step-number">1</span>
+                <span class="step-title">Скачайте приложение</span>
+                <div class="step-content">
+                    <p>Откройте App Store и найдите "VPN" или используйте прямые ссылки:</p>
+                    <div class="app-store-badges">
+                        <a href="https://apps.apple.com/app/nordvpn-vpn-fast-secure/id905953485" target="_blank">
+                            <img src="https://via.placeholder.com/150x50/000000/ffffff?text=App+Store" alt="App Store" class="app-store-badge">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <span class="step-title">Установите приложение</span>
+                <div class="step-content">
+                    <p>Нажмите "Загрузить" и подтвердите установку с помощью Face ID/Touch ID</p>
+                    <img src="https://via.placeholder.com/300x500/667eea/ffffff?text=App+Store+Download" alt="Загрузка из App Store" class="screenshot">
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <span class="step-title">Разрешите VPN подключение</span>
+                <div class="step-content">
+                    <p>При первом запуске система запросит разрешение на создание VPN-подключения</p>
+                    <img src="https://via.placeholder.com/300x500/764ba2/ffffff?text=Разрешение+VPN" alt="Разрешение VPN" class="screenshot">
+                    <p>Нажмите "Разрешить" и введите пароль устройства</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                <span class="step-title">Настройте подключение</span>
+                <div class="step-content">
+                    <p>Зарегистрируйтесь в приложении и выберите сервер для подключения</p>
+                    <img src="https://via.placeholder.com/300x500/667eea/ffffff?text=Настройка+VPN" alt="Настройка VPN" class="screenshot">
+                </div>
+            </div>
+
+            <div class="note">
+                <strong>Важно:</strong> На iPhone может потребоваться ручная настройка VPN профиля в Настройки → Основные → VPN и управление устройствами.
+            </div>
+        </div>
     </div>
+
+    <script>
+        // Initialize Telegram Web App
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.enableClosingConfirmation();
+        
+        function showPlatform(platform) {
+            // Update buttons
+            document.querySelectorAll('.platform-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Show/hide instructions
+            document.getElementById('android-instructions').classList.toggle('hidden', platform !== 'android');
+            document.getElementById('ios-instructions').classList.toggle('hidden', platform !== 'ios');
+            
+            // Send view event to Telegram
+            tg.HapticFeedback.impactOccurred('light');
+        }
+
+        // Add click handlers for download buttons
+        document.querySelectorAll('.download-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                tg.HapticFeedback.notificationOccurred('success');
+            });
+        });
+
+        // Set initial platform based on user agent
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        if (isIOS) {
+            showPlatform('ios');
+            document.querySelectorAll('.platform-btn')[1].classList.add('active');
+            document.querySelectorAll('.platform-btn')[0].classList.remove('active');
+        }
+    </script>
 </body>
 </html>
