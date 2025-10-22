@@ -429,6 +429,7 @@
           ios: document.getElementById('panel-ios')
         };
 
+        // Функция для переключения платформы
         function selectPlatform(platform) {
           tabs.forEach((btn) => {
             const isActive = btn.dataset.platform === platform;
@@ -441,16 +442,25 @@
           } catch (_) {}
         }
 
+        // Обработчик клика по кнопкам
         tablist.addEventListener('click', (e) => {
           const btn = e.target.closest('[role="tab"]');
           if (!btn) return;
           selectPlatform(btn.dataset.platform);
         });
 
-        // Автоопределение платформы
-        const ua = navigator.userAgent.toLowerCase();
-        const detected = /iphone|ipad|ipod/.test(ua) ? 'ios' : 'android';
-        selectPlatform(detected);
+        // Автоопределение платформы только при первой загрузке
+        // (если пользователь еще не взаимодействовал с переключателем)
+        if (!sessionStorage.getItem('platformSelected')) {
+          const ua = navigator.userAgent.toLowerCase();
+          const detected = /iphone|ipad|ipod/.test(ua) ? 'ios' : 'android';
+          selectPlatform(detected);
+        }
+        
+        // Сохраняем выбор пользователя в sessionStorage
+        tablist.addEventListener('click', () => {
+          sessionStorage.setItem('platformSelected', 'true');
+        });
       }
 
       if (document.readyState === 'loading') {
