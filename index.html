@@ -1,122 +1,221 @@
 <!DOCTYPE html>
 <html lang="ru" dir="ltr">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="light dark" />
-    <title>Установка v2RayTun</title>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="format-detection" content="telephone=no" />
+  <title>Установка v2RayTun</title>
 
-    <!-- (Необязательно) Telegram WebApp SDK: цвета/тема и haptics подтянутся автоматически -->
-    <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
+  <!-- Telegram WebApp SDK (тема и haptics подтянутся автоматически) -->
+  <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
 
-    <style>
+  <style>
+    /* ===== CSS variables / Telegram ThemeParams ===== */
+    :root{
+      --bg:                 var(--tg-theme-bg-color, #ffffff);
+      --text:               var(--tg-theme-text-color, #111827);
+      --hint:               var(--tg-theme-hint-color, #6b7280);
+      --link:               var(--tg-theme-link-color, #2563eb);
+      --section:            var(--tg-theme-section-bg-color, #f3f4f6);
+      --section-separator:  var(--tg-theme-section-separator-color, rgba(0,0,0,.08));
+      --subtitle:           var(--tg-theme-subtitle-text-color, #4b5563);
+      --danger:             var(--tg-theme-destructive-text-color, #ef4444);
+      --button:             var(--tg-theme-button-color, #2481cc);
+      --button-text:        var(--tg-theme-button-text-color, #ffffff);
+      --radius: 12px;
+      --shadow: 0 1px 3px rgba(0,0,0,.08);
+      --focus: 2px solid var(--link);
+    }
+    @media (prefers-color-scheme: dark){
       :root{
-        --bg: var(--tg-theme-bg-color, #ffffff);
-        --text: var(--tg-theme-text-color, #111827);
-        --hint: var(--tg-theme-hint-color, #6b7280);
-        --section: var(--tg-theme-section-bg-color, #f3f4f6);
-        --button: var(--tg-theme-button-color, #2481cc);
-        --button-text: var(--tg-theme-button-text-color, #ffffff);
-        --border: rgba(0,0,0,.08);
-        --radius: 12px;
-        --shadow: 0 1px 3px rgba(0,0,0,.08);
+        --bg:                 var(--tg-theme-bg-color, #0b0f14);
+        --text:               var(--tg-theme-text-color, #e5e7eb);
+        --hint:               var(--tg-theme-hint-color, #9ca3af);
+        --section:            var(--tg-theme-section-bg-color, #111827);
+        --section-separator:  var(--tg-theme-section-separator-color, rgba(255,255,255,.08));
+        --button:             var(--tg-theme-button-color, #2992e3);
+        --button-text:        var(--tg-theme-button-text-color, #ffffff);
       }
-      @media (prefers-color-scheme: dark){
-        :root{
-          --bg: var(--tg-theme-bg-color, #0b0f14);
-          --text: var(--tg-theme-text-color, #e5e7eb);
-          --hint: var(--tg-theme-hint-color, #9ca3af);
-          --section: var(--tg-theme-section-bg-color, #111827);
-          --button: var(--tg-theme-button-color, #2992e3);
-          --button-text: var(--tg-theme-button-text-color, #ffffff);
-          --border: rgba(255,255,255,.08);
-        }
-      }
+    }
 
-      *{ box-sizing:border-box }
-      body{
-        margin:0;
-        font:16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-        background:var(--bg);
-        color:var(--text);
-        padding:16px;
-        -webkit-font-smoothing:antialiased;
-        -moz-osx-font-smoothing:grayscale;
-      }
-      .container{ max-width:760px; margin:0 auto; }
+    /* ===== Base ===== */
+    *{ box-sizing: border-box }
+    html, body { height: 100% }
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font:16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding: 16px;
+    }
+    a{ color:var(--link); text-underline-offset: 2px }
+    a:focus-visible, button:focus-visible{ outline:var(--focus); outline-offset:2px }
 
-      header{ text-align:center; margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid var(--border); }
-      .app-icon{
-        width:72px; height:72px; margin:0 auto 12px;
-        border-radius:20px; background:var(--button); color:#fff;
-        display:grid; place-items:center; font-weight:800; font-size:24px; box-shadow:var(--shadow);
-      }
-      h1{ margin:0 0 6px; font-size:22px; }
-      .subtitle{ color:var(--hint); font-size:14px; }
+    .container{ max-width:760px; margin-inline:auto }
 
-      /* Переключатель (табы) */
-      .tabs{ display:flex; gap:6px; padding:4px; background:var(--section); border-radius:var(--radius); margin:20px 0; }
-      .tab{
-        flex:1; border:0; background:transparent; color:var(--text);
-        padding:10px 16px; border-radius:10px; font-weight:600; font-size:15px; cursor:pointer;
-      }
-      .tab[aria-selected="true"]{ background:var(--bg); box-shadow:var(--shadow); }
-      .tab:focus-visible{ outline:2px solid var(--button); outline-offset:2px; }
+    header{
+      text-align:center;
+      margin-block-end:24px;
+      padding-block-end:16px;
+      border-block-end:1px solid var(--section-separator);
+    }
+    .app-icon{
+      width:72px; height:72px; margin:0 auto 12px;
+      border-radius:20px; background:var(--button); color:#fff;
+      display:grid; place-items:center; font-weight:800; font-size:24px; box-shadow:var(--shadow);
+      user-select:none;
+    }
+    h1{ margin:0 0 6px; font-size:22px }
+    .subtitle{ color:var(--subtitle); font-size:14px }
 
-      /* Контент */
-      .panel{ display:none; }
-      .panel[data-active="true"]{ display:block; }
+    /* ===== Tabs ===== */
+    .tabs{
+      display:flex; gap:6px; padding:4px;
+      background:var(--section); border-radius:var(--radius);
+      margin-block:20px;
+    }
+    .tab{
+      flex:1; border:0; background:transparent; color:var(--text);
+      padding:10px 16px; border-radius:10px; font-weight:600; font-size:15px; cursor:pointer;
+    }
+    .tab[aria-selected="true"]{ background:var(--bg); box-shadow:var(--shadow) }
+    .tab:disabled{ opacity:.6; cursor:not-allowed }
 
-      .instructions{ display:grid; gap:16px; }
-      .step{ background:var(--section); border-radius:var(--radius); padding:16px; }
-      .step-head{ display:flex; align-items:center; gap:12px; margin-bottom:12px; }
-      .num{ width:28px; height:28px; border-radius:50%; background:var(--button); color:#fff; display:grid; place-items:center; font-weight:700; font-size:14px; }
-      .title{ font-weight:700; font-size:16px; }
-      .step p{ margin:0 0 12px; }
-      .step ul{ margin:0 0 12px 20px; }
-      .placeholder{
-        width:min(100%,300px); height:520px; margin:12px auto; border:1px dashed var(--border);
-        border-radius:10px; background:var(--bg); display:grid; place-content:center; gap:6px; color:var(--hint); text-align:center;
-      }
-      .placeholder i{ font-style:normal; font-size:42px; opacity:.6; }
+    /* ===== Panels & content ===== */
+    .panel{ display:none }
+    .panel[aria-hidden="false"]{ display:block }
 
-      .buttons{ display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
-      .button{
-        display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px 16px;
-        border:0; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer;
-        text-decoration:none; background:var(--button); color:var(--button-text);
-        transition:opacity .2s ease;
-      }
-      .button:hover{ opacity:.92; }
-      .button.secondary{ background:var(--bg); color:var(--text); border:1px solid var(--border); }
+    .instructions{ display:grid; gap:16px }
+    .step{ background:var(--section); border-radius:var(--radius); padding:16px }
+    .step + .step{ border-top: 1px solid var(--section-separator) }
+    .step-head{ display:flex; align-items:center; gap:12px; margin-bottom:12px }
+    .num{
+      width:28px; height:28px; border-radius:50%;
+      background:var(--button); color:#fff; display:grid; place-items:center;
+      font-weight:700; font-size:14px; flex:0 0 28px
+    }
+    .title{ font-weight:700; font-size:16px }
+    .step p{ margin:0 0 12px }
+    .step ul{ margin:0 0 12px 20px }
 
-      .note{
-        background:rgba(255,193,7,.12); border-left:3px solid #ffc107; padding:12px; border-radius:8px; font-size:14px;
-      }
+    .placeholder{
+      width:min(100%,300px); height:520px; margin:12px auto;
+      border:1px dashed var(--section-separator); border-radius:10px; background:var(--bg);
+      display:grid; place-content:center; gap:6px; color:var(--hint); text-align:center;
+    }
+    .placeholder i{ font-style:normal; font-size:42px; opacity:.6 }
 
-      footer{ margin-top:20px; padding-top:16px; text-align:center; color:var(--hint); font-size:13px; border-top:1px solid var(--border); }
+    .buttons{ display:flex; flex-wrap:wrap; gap:10px; margin-top:12px }
+    .button{
+      display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px 16px;
+      border:0; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer;
+      text-decoration:none; background:var(--button); color:var(--button-text);
+      transition:opacity .2s ease;
+    }
+    .button:hover{ opacity:.92 }
+    .button.secondary{ background:var(--bg); color:var(--text); border:1px solid var(--section-separator) }
 
-      @media (max-width:480px){
-        .buttons{ flex-direction:column; }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <div class="app-icon" aria-hidden="true">V2</div>
-        <h1>Установка v2RayTun</h1>
-        <p class="subtitle">Простая инструкция для Android и iOS</p>
-      </header>
+    .note{
+      background: color-mix(in srgb, #ffc107 15%, transparent);
+      border-inline-start:3px solid #ffc107;
+      padding:12px; border-radius:8px; font-size:14px;
+    }
 
-      <!-- Переключатель -->
-      <div class="tabs" role="tablist" aria-label="Выбор платформы">
-        <button type="button" id="tab-android" class="tab" role="tab" aria-selected="true" aria-controls="panel-android" data-platform="android">Android</button>
-        <button type="button" id="tab-ios" class="tab" role="tab" aria-selected="false" aria-controls="panel-ios" data-platform="ios">iPhone</button>
-      </div>
+    footer{
+      margin-top:20px; padding-top:16px; text-align:center; color:var(--hint); font-size:13px;
+      border-top:1px solid var(--section-separator)
+    }
 
-      <!-- Панель Android -->
-      <section id="panel-android" class="panel" role="tabpanel" aria-labelledby="tab-android" data-active="true">
+    @media (max-width:480px){
+      .buttons{ flex-direction:column }
+    }
+    @media (prefers-reduced-motion: reduce){
+      .button{ transition:none }
+    }
+  </style>
+<style>
+/* === Light theme contrast fixes === */
+:root{
+  /* отдельная поверхность карточек/табов для светлой темы */
+  --card-bg: #f7f8fb;              /* светлая, но заметно отличается от белого фона */
+  --tab-surface: #eef2f7;          /* фон под табами */
+  --border-strong: rgba(0,0,0,.12);/* более заметная рамка */
+}
+
+/* в тёмной теме сохраняем текущую палитру */
+@media (prefers-color-scheme: dark){
+  :root{
+    --card-bg: var(--section);
+    --tab-surface: var(--section);
+    --border-strong: rgba(255,255,255,.10);
+  }
+}
+
+/* применяем карточный фон и явную рамку */
+.step{
+  background: var(--card-bg);
+  border: 1px solid var(--border-strong);
+  box-shadow: 0 1px 2px rgba(17,24,39,.06), 0 1px 3px rgba(17,24,39,.08);
+}
+
+/* фон зоны табов и активный таб – как отдельная карточка */
+.tabs{
+  background: var(--tab-surface);
+  border: 1px solid var(--border-strong);
+}
+
+.tab[aria-selected="true"]{
+  background: var(--card-bg);
+  border: 1px solid var(--border-strong);
+  box-shadow: 0 1px 2px rgba(17,24,39,.06);
+}
+
+/* вторичные кнопки — явнее отделяем от фона */
+.button.secondary{
+  background: var(--card-bg);
+  border: 1px solid var(--border-strong);
+}
+
+/* плейсхолдер тоже отделим */
+.placeholder{
+  background: var(--card-bg);
+  border: 1px dashed var(--border-strong);
+}
+
+/* тоньше разделители, но всё ещё заметны на светлом */
+header, footer{
+  border-color: var(--border-strong);
+}
+</style>
+</head>
+<body>
+  <noscript>Для корректной работы включите JavaScript.</noscript>
+  <div class="container">
+    <header>
+      <div class="app-icon" aria-hidden="true">V2</div>
+      <h1>Установка v2RayTun</h1>
+      <p class="subtitle">Простая инструкция для Android и iOS</p>
+    </header>
+
+    <!-- Переключатель -->
+    <nav class="tabs" role="tablist" aria-label="Выбор платформы">
+      <button type="button" id="tab-android" class="tab" role="tab"
+              aria-selected="true" aria-controls="panel-android" data-platform="android">
+        Android
+      </button>
+      <button type="button" id="tab-ios" class="tab" role="tab"
+              aria-selected="false" aria-controls="panel-ios" data-platform="ios">
+        iPhone
+      </button>
+    </nav>
+
+    <main>
+      <!-- Android -->
+      <section id="panel-android" class="panel" role="tabpanel"
+               aria-labelledby="tab-android" aria-hidden="false">
         <div class="instructions">
           <article class="step">
             <div class="step-head">
@@ -124,8 +223,8 @@
             </div>
             <p>Скачайте v2RayTun из Google Play или официального GitHub-репозитория.</p>
             <div class="buttons">
-              <a class="button" href="https://github.com/2dust/v2rayNG/releases/tag/1.10.24" target="_blank" rel="noopener">Скачать с GitHub</a>
-              <a class="button secondary" href="https://play.google.com/store/apps/details?id=com.v2raytun.android" target="_blank" rel="noopener">Google Play</a>
+              <a class="button" href="https://play.google.com/store/apps/details?id=com.v2raytun.android" target="_blank" rel="noopener noreferrer">Google Play</a>
+              <a class="button secondary" href="https://goo.su/J9c4k">Скачать с GitHub</a>
             </div>
           </article>
 
@@ -133,9 +232,9 @@
             <div class="step-head">
               <div class="num">2</div><div class="title">Разрешите установку</div>
             </div>
-            <p>Если скачали APK, разрешите установку из неизвестных источников: Настройки → Безопасность → Неизвестные источники.</p>
+            <p>Если скачали APK, разрешите установку из неизвестных источников: <b>Настройки → Безопасность → Неизвестные источники</b>.</p>
             <div class="placeholder" aria-hidden="true"><i>📱</i><span>Скриншот настроек</span></div>
-            <div class="note">Устанавливайте только из проверенных источников.</div>
+            <p class="note">Устанавливайте только из проверенных источников.</p>
           </article>
 
           <article class="step">
@@ -154,13 +253,14 @@
               <div class="num">4</div><div class="title">Запустите VPN</div>
             </div>
             <p>Нажмите кнопку подключения и подтвердите разрешение VPN.</p>
-            <div class="note">Добавьте приложение в исключения энергосбережения для стабильной работы.</div>
+            <p class="note">Добавьте приложение в исключения энергосбережения для стабильной работы.</p>
           </article>
         </div>
       </section>
 
-      <!-- Панель iOS -->
-      <section id="panel-ios" class="panel" role="tabpanel" aria-labelledby="tab-ios" data-active="false">
+      <!-- iOS -->
+      <section id="panel-ios" class="panel" role="tabpanel"
+               aria-labelledby="tab-ios" aria-hidden="true">
         <div class="instructions">
           <article class="step">
             <div class="step-head">
@@ -168,7 +268,7 @@
             </div>
             <p>Установите v2RayTun из App Store.</p>
             <div class="buttons">
-              <a class="button" href="https://apps.apple.com/am/app/v2raytun/id6476628951" target="_blank" rel="noopener">App Store</a>
+              <a class="button" href="https://apps.apple.com/am/app/v2raytun/id6476628951" target="_blank" rel="noopener noreferrer">App Store</a>
             </div>
           </article>
 
@@ -176,7 +276,7 @@
             <div class="step-head">
               <div class="num">2</div><div class="title">Настройте VPN-профиль</div>
             </div>
-            <p>Перейдите: Настройки → Основные → VPN и управление устройствами → Добавить конфигурацию VPN…</p>
+            <p>Перейдите: <b>Настройки → Основные → VPN и управление устройствами → Добавить конфигурацию VPN…</b></p>
           </article>
 
           <article class="step">
@@ -195,73 +295,83 @@
               <div class="num">4</div><div class="title">Активируйте VPN</div>
             </div>
             <p>Включите VPN в приложении и подтвердите системный запрос «Разрешить».</p>
-            <div class="note">На iOS VPN может отключаться при блокировке экрана.</div>
+            <p class="note">На iOS VPN может отключаться при блокировке экрана.</p>
           </article>
         </div>
       </section>
+    </main>
 
-      <footer>
-        v2RayTun Installation Guide
-      </footer>
-    </div>
+    <footer>v2RayTun Installation Guide</footer>
+  </div>
 
-    <script>
-      // Гарантированная инициализация после готовности DOM
-      (function () {
-        const onReady = (fn) => (document.readyState === "loading")
+  <script>
+    // Гарантированная инициализация после готовности DOM
+    (function () {
+      const onReady = (fn) =>
+        document.readyState === "loading"
           ? document.addEventListener("DOMContentLoaded", fn, { once: true })
           : fn();
 
-        onReady(() => {
-          // Telegram WebApp expand (безопасно)
-          try { window.Telegram?.WebApp?.expand?.(); } catch(_) {}
+      onReady(() => {
+        // Telegram: сообщаем о готовности и разворачиваем
+        try {
+          window.Telegram?.WebApp?.ready?.();
+          window.Telegram?.WebApp?.expand?.();
+        } catch (_) {}
 
-          const tablist = document.querySelector(".tabs");
-          const tabs = Array.from(tablist.querySelectorAll('[role="tab"]'));
-          const panels = {
-            android: document.getElementById("panel-android"),
-            ios: document.getElementById("panel-ios")
-          };
+        const tablist = document.querySelector(".tabs");
+        const tabs = Array.from(tablist.querySelectorAll('[role="tab"]'));
+        const panels = {
+          android: document.getElementById("panel-android"),
+          ios: document.getElementById("panel-ios"),
+        };
 
-          function setActive(platform){
-            // Переключаем aria выбранность
-            tabs.forEach(btn => {
-              const isActive = btn.dataset.platform === platform;
-              btn.setAttribute("aria-selected", String(isActive));
-            });
-
-            // Показываем нужную панель
-            panels.android.setAttribute("data-active", String(platform === "android"));
-            panels.ios.setAttribute("data-active", String(platform === "ios"));
-
-            // Haptics (если Telegram WebApp)
-            try { window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("light"); } catch(_) {}
-          }
-
-          // Делегирование кликов
-          tablist.addEventListener("click", (e) => {
-            const btn = e.target.closest('[role="tab"]');
-            if (!btn) return;
-            setActive(btn.dataset.platform);
+        function setActive(platform){
+          tabs.forEach(btn => {
+            const isActive = btn.dataset.platform === platform;
+            btn.setAttribute("aria-selected", String(isActive));
           });
 
-          // Навигация клавиатурой (влево/вправо)
-          tablist.addEventListener("keydown", (e) => {
-            if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
-            e.preventDefault();
-            const currentIndex = tabs.findIndex(t => t.getAttribute("aria-selected") === "true");
-            const dir = e.key === "ArrowRight" ? 1 : -1;
-            const next = (currentIndex + dir + tabs.length) % tabs.length;
-            tabs[next].focus();
-            setActive(tabs[next].dataset.platform);
-          });
+          const isAndroid = platform === "android";
+          panels.android.setAttribute("aria-hidden", String(!isAndroid));
+          panels.ios.setAttribute("aria-hidden", String(isAndroid));
 
-          // Автоопределение платформы (можно перебить кликом)
-          const ua = navigator.userAgent.toLowerCase();
-          const detected = /iphone|ipad|ipod/.test(ua) ? "ios" : "android";
-          setActive(detected);
+          // Haptics (если доступно)
+          try { window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("light"); } catch(_) {}
+        }
+
+        // Делегирование кликов
+        tablist.addEventListener("click", (e) => {
+          const btn = e.target.closest('[role="tab"]');
+          if (!btn) return;
+          setActive(btn.dataset.platform);
         });
-      })();
-    </script>
-  </body>
+
+        // Навигация клавиатурой (влево/вправо)
+        tablist.addEventListener("keydown", (e) => {
+          if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+          e.preventDefault();
+          const currentIndex = tabs.findIndex(t => t.getAttribute("aria-selected") === "true");
+          const dir = e.key === "ArrowRight" ? 1 : -1;
+          const next = (currentIndex + dir + tabs.length) % tabs.length;
+          tabs[next].focus();
+          setActive(tabs[next].dataset.platform);
+        });
+
+        // Автоопределение платформы (переопределяется кликом)
+        const ua = navigator.userAgent.toLowerCase();
+        const detected = /iphone|ipad|ipod/.test(ua) ? "ios" : "android";
+        setActive(detected);
+
+        // Установка meta theme-color под цвет фона (приятнее на мобиле)
+        try {
+          const meta = document.querySelector('meta[name="theme-color"]') || document.createElement('meta');
+          meta.name = "theme-color";
+          meta.content = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#ffffff';
+          document.head.appendChild(meta);
+        } catch(_) {}
+      });
+    })();
+  </script>
+</body>
 </html>
